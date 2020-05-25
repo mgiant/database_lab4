@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "extmem.h"
-
+#include <string.h>
 Buffer *initBuffer(size_t bufSize, size_t blkSize, Buffer *buf)
 {
     int i;
@@ -62,8 +62,9 @@ unsigned char *getNewBlockInBuffer(Buffer *buf)
 
 void freeBlockInBuffer(unsigned char *blk, Buffer *buf)
 {
+    if(*(blk-1) == BLOCK_UNAVAILABLE)
+        buf->numFreeBlk++;
     *(blk - 1) = BLOCK_AVAILABLE;
-    buf->numFreeBlk++;
 }
 
 int dropBlockOnDisk(unsigned int addr)
